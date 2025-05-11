@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Student Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background: #0073e6;
+            color: #fff;
+            padding: 1em 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+
+        section {
+            background: #fff;
+            padding: 20px;
+            margin: 20px auto;
+            width: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        form input, form label, form select {
+            display: block;
+            width: 100%;
+        }
+
+        form input, form select {
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form button {
+            background-color: #0073e6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #005bb5;
+        }
+
+        footer {
+            background: #0073e6;
+            color: #fff;
+            text-align: center;
+            padding: 1em 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .signature-pad {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        .signature-pad canvas {
+            width: 100%;
+            height: 150px;
+            border: 1px solid #eee;
+        }
+
+        .signature-controls button {
+            margin-right: 5px;
+            padding: 8px 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+        }
+
+        .signature-controls button:hover {
+            background-color: #eee;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Student Card Appointment System</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/Studlogin">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Student Registration</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="success-message">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            <!-- FIXED the form action URL -->
+            <form action="{{ url_for('students.register_student') }}" method="POST" enctype="multipart/form-data">
+                <label for="studentNumber">Student Number</label>
+                <input type="text" name="studentNumber" id="studentNumber" maxlength="9" required />
+
+                <label for="firstName">First Name</label>
+                <input type="text" name="firstName" id="firstName" required />
+
+                <label for="lastName">Last Name</label>
+                <input type="text" name="lastName" id="lastName" required />
+
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" required />
+
+                <label for="residence">Residence</label>
+                <select name="residence" id="residence" required>
+                    <option value="">Select Residence</option>
+                    <option value="Corridor Hills">Corridor Hills</option>
+                    <option value="Khayalethu">Khayalethu</option>
+                    <option value="Campus Residence">Campus Residence</option>
+                </select>
+
+                <label for="picture">Picture (optional)</label>
+                <input type="file" name="picture" id="picture" accept="image/*" />
+
+                <label for="signature">Signature</label>
+                <div class="signature-pad">
+                    <canvas id="signatureCanvas"></canvas>
+                </div>
+                <div class="signature-controls">
+                    <button type="button" id="clearSignature">Clear</button>
+                </div>
+                <input type="hidden" name="signatureData" id="signatureData">
+
+                <button type="submit">Register</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Student Card Appointment System. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+    <script>
+        const canvas = document.getElementById('signatureCanvas');
+        const signaturePad = new SignaturePad(canvas);
+        const clearButton = document.getElementById('clearSignature');
+        const signatureDataInput = document.getElementById('signatureData');
+        const form = document.querySelector('form');
+
+        // Resize canvas to fit container properly
+        function resizeCanvas() {
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+            signaturePad.clear(); // Clear canvas after resize
+        }
+
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+
+        clearButton.addEventListener('click', () => {
+            signaturePad.clear();
+            signatureDataInput.value = '';
+        });
+
+        form.addEventListener('submit', (event) => {
+            if (!signaturePad.isEmpty()) {
+                const signatureDataURL = signaturePad.toDataURL();
+                signatureDataInput.value = signatureDataURL;
+            } else {
+                alert('Please provide your signature.');
+                event.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

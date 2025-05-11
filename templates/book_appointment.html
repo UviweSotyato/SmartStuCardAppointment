@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book Appointment</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; }
+    header, footer { background-color: #0073e6; color: white; padding: 1em; text-align: center; }
+    .content { max-width: 600px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    a { color: #0073e6; text-decoration: none; }
+    button { background-color: #0073e6; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Book Appointment</h1>
+</header>
+
+<div class="content">
+  <p>Welcome, {{ student.FirstName }} {{ student.LastName }} ({{ student.student_number }})</p>
+  <form method="POST" action="{{ url_for('submit_appointment', student_number=student.student_number) }}">
+    <label for="date">Select Date:</label><br>
+    <input type="date" id="date" name="date" required><br><br>
+
+    <label for="time">Select Time:</label><br>
+    <input type="time" id="time" name="time" required><br><br>
+
+    <button type="submit">Book Appointment</button>
+  </form>
+  <br>
+  <a href="{{ url_for('dashboard', student_number=student.student_number) }}">&#8592; Back to Dashboard</a>
+</div>
+
+<footer>
+  &copy; 2025 Student Card Appointment System
+</footer>
+
+</body>
+</html>

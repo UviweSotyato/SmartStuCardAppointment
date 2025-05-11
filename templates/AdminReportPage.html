@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .report-header {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #c8e6c9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+        }
+
+        table th {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Style the Print Button */
+        .no-print button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .no-print button:hover {
+            background-color: #388e3c;
+        }
+
+        .no-print {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        /* Hide the print button and adjust margins during printing */
+        @media print {
+            .no-print {
+                display: none;
+            }
+            body {
+                background: white;
+                padding: 0;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Admin Report</h1>
+
+    <div class="report-header">
+        <p><strong>Number of Male Admins:</strong> {{ male_count }}</p>
+        <p><strong>Number of Female Admins:</strong> {{ female_count }}</p>
+    </div>
+
+    <h2>All Registered Admins</h2>
+    <table>
+        <tr>
+            <th>Admin ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Gender</th>
+        </tr>
+        {% for admin in admins %}
+        <tr>
+            <td>{{ admin.AdminID }}</td>
+            <td>{{ admin.Name }}</td>
+            <td>{{ admin.Surname }}</td>
+            <td>{{ admin.Email }}</td>
+            <td>{{ admin.Gender }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Print Button -->
+    <div class="no-print">
+        <button onclick="printReport()">Print Report</button>
+    </div>
+
+    <script>
+        function printReport() {
+            window.print();
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Dashboard</title>
+  <style>
+    nav a, nav button {
+      background-color: #0073e6;
+      color: white;
+      padding: 12px 20px;
+      margin: 5px;
+      text-decoration: none;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    nav a:hover, nav button:hover {
+      background-color: #005bb5;
+      transform: scale(1.05);
+    }
+
+    nav a:active, nav button:active {
+      background-color: #003f87;
+      transform: scale(1);
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #0073e6;
+      color: white;
+      padding: 1em;
+      display: flex;
+      align-items: center;
+    }
+
+    .profile-pic {
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid white;
+      margin-right: 10px;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .content {
+      text-align: center;
+      max-width: 800px;
+      width: 100%;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    nav {
+      margin-bottom: 20px;
+    }
+
+    nav a, nav button {
+      background-color: #0073e6;
+      color: white;
+      padding: 10px 15px;
+      margin: 5px;
+      text-decoration: none;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+    }
+
+    footer {
+      background-color: #0073e6;
+      color: white;
+      text-align: center;
+      padding: 1em;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 400px;
+      border-radius: 10px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    video {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .student-card {
+      border: 2px solid #0073e6;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+
+    .student-card img {
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      width: 60px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    .signature {
+      width: 100px;
+      height: auto;
+      margin-top: 10px;
+    }
+
+    .card-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="{{ student.PictureURL }}" alt="Profile Picture" class="profile-pic" id="profilePic">
+  <h1>Student Dashboard</h1>
+</header>
+
+<div class="container">
+  <div class="content">
+    <nav>
+      <a href="{{ url_for('appointments.add_appointment', student_number=student.StudentNumber) }}">Rebook Appointment</a>
+      <a href="{{ url_for('requests.view_requests') }}">View Requests</a>
+      <a href="{{ url_for('notifications.view_notifications') }}">View Notifications</a>      
+      <button id="viewCardBtn">View Student Card</button>
+    </nav>
+
+    <video controls>
+      <source src="your-video-file.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2025 Student Card Appointment System | Contact: support@university.edu | Tel: +27 12 345 6789</p>
+</footer>
+
+<!-- Modal for student card preview -->
+<div id="cardModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeCardModal">&times;</span>
+    <div class="student-card" id="studentCardContent">
+      <img src="{{ url_for('static', filename='uploads/school-badge.png') }}" alt="School Badge" class="badge">
+      <div class="card-title">Tshwane University of Technology</div>
+      <img src="{{ student.PictureURL }}" alt="Student Picture" width="100">
+      <p><strong>Name:</strong> {{ student.FirstName }} {{ student.LastName }}</p>
+      <p><strong>Student Number:</strong> {{ student.StudentNumber }}</p>
+      <p><strong>Year:</strong> {{ current_year }}</p>
+      <img src="{{ student.SignatureURL }}" alt="Signature" class="signature">
+    </div>
+    <button id="printCardBtn">Print Card</button> <!-- 🖨️ Added Print Button -->
+  </div>
+</div>
+
+<script>
+  const profilePic = document.getElementById('profilePic');
+  const viewCardBtn = document.getElementById('viewCardBtn');
+  const cardModal = document.getElementById('cardModal');
+  const closeCardModal = document.getElementById('closeCardModal');
+  const printCardBtn = document.getElementById('printCardBtn');
+
+  viewCardBtn.onclick = () => cardModal.style.display = "block";
+  closeCardModal.onclick = () => cardModal.style.display = "none";
+
+  window.onclick = (event) => {
+    if (event.target == cardModal) cardModal.style.display = "none";
+  };
+
+  printCardBtn.onclick = () => {
+    const cardContent = document.getElementById('studentCardContent').innerHTML;
+    const printWindow = window.open('', '', 'height=600,width=400');
+    printWindow.document.write('<html><head><title>Print Student Card</title>');
+    printWindow.document.write('<style>body{font-family:Arial,sans-serif;text-align:center;} .student-card img{border-radius:5px;margin-bottom:10px;} .badge{width:60px;height:auto;margin-bottom:10px;} .signature{width:100px;height:auto;margin-top:10px;} .card-title{font-weight:bold;margin-bottom:5px;}</style>');
+    printWindow.document.write('</head><body>');
+    printWindow.document.write('<div class="student-card">' + cardContent + '</div>');
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  };
+
+</script>
+
+</body>
+</html>

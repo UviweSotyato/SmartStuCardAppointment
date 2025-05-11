@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Appointment</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #0073e6;
+      color: white;
+      padding: 1em;
+      text-align: center;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    footer {
+      background-color: #0073e6;
+      color: white;
+      text-align: center;
+      padding: 1em;
+      margin-top: 30px;
+    }
+
+    form {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 50%;
+      margin: 0 auto;
+    }
+
+    input[type="date"], input[type="datetime-local"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+
+    button {
+      background-color: #0073e6;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #005bb5;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Book Appointment</h1>
+</header>
+
+<div class="container">
+  <form action="{{ url_for('book_appointment', student_number=student_number) }}" method="POST">
+    <label for="appointment_date">Appointment Date</label>
+    <input type="date" id="appointment_date" name="appointment_date" required>
+
+    <label for="collection_date">Collection Date</label>
+    <input type="date" id="collection_date" name="collection_date" required>
+
+    <label for="collection_time">Collection Time</label>
+    <input type="datetime-local" id="collection_time" name="collection_time" required>
+
+    <button type="submit">Book Appointment</button>
+  </form>
+</div>
+
+<footer>
+  <p>&copy; 2025 Student Card Appointment System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

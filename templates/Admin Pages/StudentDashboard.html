@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    header {
+      background: #0073e6;
+      color: #fff;
+      padding: 1em 0;
+      text-align: center;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      text-align: center;
+    }
+
+    nav ul li {
+      display: inline;
+      margin: 0 15px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    main {
+      padding: 20px;
+      text-align: center;
+    }
+
+    section {
+      background: #fff;
+      padding: 20px;
+      margin: 20px auto;
+      width: 50%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      text-align: left;
+    }
+
+    .profile-pic, .signature {
+      max-width: 150px;
+      height: auto;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+
+    footer {
+      background: #0073e6;
+      color: #fff;
+      text-align: center;
+      padding: 1em 0;
+      position: relative;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Student Card Appointment System</h1>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="student-details">
+      <h2>Student Card Details</h2>
+      <p><strong>Student Number:</strong> {{ student.studentNumber }}</p>
+      <p><strong>Name:</strong> {{ student.firstName }} {{ student.lastName }}</p>
+      <p><strong>Email:</strong> {{ student.email }}</p>
+      <p><strong>Residence:</strong> {{ student.residence }}</p>
+      <p><strong>Status:</strong> {{ student.status }}</p>
+      <p><strong>Collection Date:</strong> {{ student.collectionDate }}</p>
+      <p><strong>Collection Time:</strong> {{ student.collectionTime }}</p>
+      <p><strong>Picture:</strong><br>
+        {% if student.picture %}
+          <img src="{{ url_for('static', filename='uploads/' ~ student.picture) }}" class="profile-pic" />
+        {% else %}
+          <em>No picture uploaded.</em>
+        {% endif %}
+      </p>
+      <p><strong>Signature:</strong><br>
+        {% if student.signature %}
+          <img src="{{ url_for('static', filename='uploads/' ~ student.signature) }}" class="signature" />
+        {% else %}
+          <em>No signature uploaded.</em>
+        {% endif %}
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Student Card Appointment System. All rights reserved.</p>
+  </footer>
+</body>
+</html>

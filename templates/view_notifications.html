@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Notifications</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; }
+    header, footer { background-color: #0073e6; color: white; padding: 1em; text-align: center; }
+    .content { max-width: 700px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .notification { border-bottom: 1px solid #ddd; padding: 10px 0; }
+    .notification:last-child { border-bottom: none; }
+    a, button { color: white; text-decoration: none; background-color: #0073e6; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; margin: 5px 0; display: inline-block; }
+    button.delete-btn { background-color: #e60000; }
+    form.inline { display: inline; }
+    input[type="date"] { padding: 7px; border-radius: 5px; border: 1px solid #ccc; }
+    .actions { margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>View Notifications</h1>
+</header>
+
+<div class="content">
+  <p>Notifications for {{ student.FirstName }}:</p>
+
+  {% if notifications %}
+    {% for note in notifications %}
+      <div class="notification">
+        <strong>{{ note.Title }}</strong><br>
+        <small>{{ note.NotificationDate }}</small><br>
+        <p>{{ note.Message }}</p>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No notifications available.</p>
+  {% endif %}
+
+  <div class="actions">
+    <!-- Filter by date -->
+    <form class="inline" action="{{ url_for('notifications.filter_notifications_by_date') }}" method="get">
+      <input type="date" name="date" required>
+      <button type="submit">Filter by Date</button>
+    </form>
+
+    <!-- Delete all -->
+    <button type="button" class="delete-btn" onclick="confirmDelete()">Delete All Notifications</button>
+
+    <br><br>
+    <a href="{{ url_for('student_login.student_dashboard', student_number=student.student_number) }}">Back to Dashboard</a>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 Student Card Appointment System
+</footer>
+
+<script>
+  function confirmDelete() {
+    if (confirm('Are you sure you want to delete all notifications?')) {
+      fetch('{{ url_for("notifications.delete_all_notifications") }}', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('All notifications deleted successfully');
+          window.location.reload();
+        } else {
+          alert('Failed to delete notifications');
+        }
+      });
+    }
+  }
+</script>
+
+</body>
+</html>

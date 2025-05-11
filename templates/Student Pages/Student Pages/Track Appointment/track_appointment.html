@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Track Appointment Status</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #0073e6;
+      color: white;
+      padding: 1em;
+      text-align: center;
+    }
+
+    .container {
+      padding: 20px;
+      width: 60%;
+      margin: auto;
+    }
+
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      background-color: #0073e6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+
+    footer {
+      background-color: #0073e6;
+      color: white;
+      text-align: center;
+      padding: 1em;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Track Appointment Status</h1>
+</header>
+
+<div class="container">
+  <form method="POST">
+    <label for="student_number">Enter Your Student Number:</label>
+    <input type="text" name="student_number" id="student_number" required>
+    <button type="submit">Track</button>
+  </form>
+
+  {% if status_data %}
+    <h3>Your Appointment Status</h3>
+    <table>
+      <tr>
+        <th>Appointment Date</th>
+        <th>Collection Date</th>
+        <th>Collection Time</th>
+        <th>Status</th>
+      </tr>
+      {% for status in status_data %}
+        <tr>
+          <td>{{ status.AppointmentDate }}</td>
+          <td>{{ status.CollectionDate }}</td>
+          <td>{{ status.CollectionTime }}</td>
+          <td>{{ status.AppointmentStatus }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% elif status_data is not none %}
+    <p>No appointments found for this student number.</p>
+  {% endif %}
+</div>
+
+<footer>
+  <p>&copy; 2025 Student Card Appointment System. All rights reserved.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Submit Request</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; }
+    header, footer { background-color: #0073e6; color: white; padding: 1em; text-align: center; }
+    .content { max-width: 600px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    select, input[type="date"] { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
+    button { margin-top: 20px; background-color: #0073e6; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background-color: #005bb5; }
+    .back-link { display: inline-block; margin-top: 15px; text-decoration: none; color: #0073e6; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Submit Request</h1>
+</header>
+
+<div class="content">
+  <form action="{{ url_for('requests.submit_request') }}" method="POST">
+    <input type="hidden" name="student_number" value="{{ session['student_number'] }}">
+
+    <label for="request_type">Select Request Type</label>
+    <select name="request_type" id="request_type" required onchange="toggleDateField()">
+      <option value="">-- Choose Request Type --</option>
+      <option value="cancel">Application Cancellation</option>
+      <option value="change_date">Application Date Change</option>
+    </select>
+
+    <div id="dateField" style="display:none;">
+      <label for="new_date">Select New Date (only for Date Change)</label>
+      <input type="date" name="new_date" id="new_date">
+    </div>
+
+    <button type="submit">Submit Request</button>
+  </form>
+
+  <a class="back-link" href="{{ url_for('requests.view_requests') }}">&#8592; Back to View Requests</a>
+</div>
+
+<footer>
+  &copy; 2025 Student Card Appointment System
+</footer>
+
+<script>
+  function toggleDateField() {
+    const requestType = document.getElementById('request_type').value;
+    const dateField = document.getElementById('dateField');
+    if (requestType === 'change_date') {
+      dateField.style.display = 'block';
+    } else {
+      dateField.style.display = 'none';
+      document.getElementById('new_date').value = ''; // Clear date
+    }
+  }
+</script>
+
+</body>
+</html>

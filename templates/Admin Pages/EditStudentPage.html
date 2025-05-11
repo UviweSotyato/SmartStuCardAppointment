@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Student Residence</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        header, footer {
+            background: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            background: #fff;
+            margin-top: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label, input, select, button {
+            margin: 10px 0;
+        }
+
+        input, select {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Edit Student Residence</h1>
+        </header>
+        <main>
+            <form action="{{ url_for('edit_student') }}" method="POST">
+                <!-- Hidden input for Student Number -->
+                <input type="hidden" name="student_number" value="{{ student.StudentNumber }}">
+
+                <label for="residence">New Residence:</label>
+                <select id="residence" name="new_residence" required>
+                    <option value="Corridor Hills" {% if student.Residence == "Corridor Hills" %}selected{% endif %}>Corridor Hills</option>
+                    <option value="Khayalethu" {% if student.Residence == "Khayalethu" %}selected{% endif %}>Khayalethu</option>
+                    <option value="Campus Residence" {% if student.Residence == "Campus Residence" %}selected{% endif %}>Campus Residence</option>
+                </select>
+
+                <button type="submit">Update Residence</button>
+            </form>
+            <a href="{{ url_for('view_students') }}">← Back to Students</a>
+        </main>
+        <footer>
+            <p>&copy; 2025 SmartStuCardAppo. All Rights Reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
+

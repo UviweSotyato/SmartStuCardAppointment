@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Appointment Status</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        /* Main Container */
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        /* Header Styling */
+        header {
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            color: #1e2a47;
+            font-weight: bold;
+        }
+
+        /* Button Styling */
+        .btn {
+            display: block;
+            width: 250px;
+            margin: 10px auto;
+            padding: 12px;
+            font-size: 1.1em;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-back {
+            background-color: #6c757d;
+        }
+
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 1em;
+        }
+
+        table th, table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Footer Styling */
+        footer {
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+    <script>
+        // Function to load appointment status data dynamically
+        function loadAppointmentStatus() {
+            fetch('view_appointment_status.php')
+                .then(response => response.text())
+                .then(data => document.getElementById("appointmentStatusData").innerHTML = data);
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Appointment Status Information</h1>
+        </header>
+        <main>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status ID</th>
+                        <th>Appointment ID</th>
+                        <th>Status Message</th>
+                        <th>Collection Date</th>
+                        <th>Collection Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for status in statuses %}
+                    <tr>
+                        <td>{{ status.StatusID }}</td>
+                        <td>{{ status.Appointment_ID }}</td>
+                        <td>{{ status.StatusMessage }}</td>
+                        <td>{{ status.CollectionDate }}</td>
+                        <td>{{ status.CollectionTime }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button class="btn btn-back" onclick="window.location.href='{{ url_for('auth_routes.admin_home') }}'">Back to Admin Home</button>
+        </main>
+        <footer>
+            <p>&copy; 2025 SmartStuCardAppo. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+</body>
+</html>

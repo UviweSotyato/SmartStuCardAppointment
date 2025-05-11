@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Card Preview</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .card {
+            width: 400px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0px 0px 10px #aaa;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .card img {
+            width: 100px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            margin: 10px 0;
+            color: #0073e6;
+        }
+
+        .card p {
+            margin: 5px 0;
+        }
+
+        .btn-back {
+            margin-top: 20px;
+            background-color: #0073e6;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        {% if student.Picture %}
+            <img src="data:image/jpeg;base64,{{ student.Picture | b64encode | decode('utf-8') }}" alt="Student Picture">
+        {% else %}
+            <img src="{{ url_for('static', filename='default.jpg') }}" alt="Default Picture">
+        {% endif %}
+        <h3>{{ student.FirstName }} {{ student.LastName }}</h3>
+        <p><strong>Student Number:</strong> {{ student.StudentNumber }}</p>
+        <p><strong>Email:</strong> {{ student.Email }}</p>
+        <p><strong>Residence:</strong> {{ student.Residence }}</p>
+    </div>
+
+    <a href="{{ url_for('student_dashboard', student_number=student.StudentNumber) }}" class="btn-back">Back to Dashboard</a>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        pre {
+            font-size: 1.2em;
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        h2 {
+            margin-top: 40px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body onload="window.print()">
+    <pre>{{ report_content }}</pre>
+
+    <h2>All Registered Students</h2>
+    <table>
+        <tr>
+            <th>Student Number</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Residence</th>
+        </tr>
+        {% for student in students %}
+        <tr>
+            <td>{{ student.StudentNumber }}</td>
+            <td>{{ student.FirstName }}</td>
+            <td>{{ student.LastName }}</td>
+            <td>{{ student.Email }}</td>
+            <td>{{ student.Residence }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

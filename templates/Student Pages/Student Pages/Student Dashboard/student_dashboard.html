@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #0073e6;
+      color: white;
+      padding: 1em;
+      text-align: center;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border: 1px solid #ddd;
+    }
+
+    footer {
+      background-color: #0073e6;
+      color: white;
+      text-align: center;
+      padding: 1em;
+      margin-top: 30px;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+    }
+
+    .profile img {
+      border-radius: 50%;
+      margin-right: 15px;
+      width: 80px;
+      height: 80px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Student Dashboard</h1>
+</header>
+
+<div class="container">
+  <div class="profile">
+    <img src="{{ url_for('static', filename='images/student-placeholder.png') }}" alt="Student Picture">
+    <div>
+      <h3>{{ student.FirstName }} {{ student.LastName }}</h3>
+      <p>Email: {{ student.Email }}</p>
+      <p>Residence: {{ student.Residence }}</p>
+    </div>
+  </div>
+
+  <h3>Your Appointments</h3>
+  <table>
+    <tr>
+      <th>Appointment Date</th>
+      <th>Collection Date</th>
+      <th>Collection Time</th>
+      <th>Status</th>
+    </tr>
+    {% for appointment in appointments %}
+    <tr>
+      <td>{{ appointment.AppointmentDate }}</td>
+      <td>{{ appointment.CollectionDate }}</td>
+      <td>{{ appointment.CollectionTime }}</td>
+      <td>{{ appointment.AppointmentStatus }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <a href="{{ url_for('book_appointment', student_number=student.StudentNumber) }}">
+    <button>Book New Appointment</button>
+  </a>
+</div>
+
+<footer>
+  <p>&copy; 2025 Student Card Appointment System. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

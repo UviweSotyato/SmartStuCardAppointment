@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Appointments</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; color: #333; }
+        .container { width: 80%; margin: auto; padding: 20px; background: #fff; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; }
+        .btn { display: inline-block; margin: 5px; padding: 10px 20px; font-size: 1em; color: white; background-color: #007bff; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; }
+        .btn:hover { background-color: #0056b3; }
+        .btn-back { background-color: #6c757d; }
+        .btn-back:hover { background-color: #5a6268; }
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        th, td { padding: 12px; border: 1px solid #ddd; }
+        th { background-color: #007bff; color: white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #f1f1f1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Student Appointment Information</h1>
+        </header>
+ <main>
+            <a class="btn" href="/">View Appointments</a>
+            <a class="btn" href="/add">Add Appointment</a>
+            <a class="btn btn-back" href="/admin">Back to Admin Home</a>
+
+            {% if deleted %}
+                <p style="color: green;">Appointment deleted successfully!</p>
+            {% endif %}
+
+            {% if appointments %}
+                <table>
+                    <tr>
+                        <th>Appointment ID</th>
+                        <th>Student Number</th>
+                        <th>Appointment Date</th>
+                        <th>Collection Date</th>
+                        <th>Collection Time</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    {% for appointment in appointments %}
+                    <tr>
+                        <td>{{ appointment.Appointment_Id }}</td>
+                        <td>{{ appointment.StudentNumber }}</td>
+                        <td>{{ appointment.AppointmentDate }}</td>
+                        <td>{{ appointment.CollectionDate }}</td>
+                        <td>{{ appointment.CollectionTime }}</td>
+                        <td>{{ appointment.AppointmentStatus }}</td>
+                        <td>
+                            <a class="btn" href="/edit/{{ appointment.Appointment_Id }}">Edit</a>
+                            <a class="btn btn-back" href="/delete/{{ appointment.Appointment_Id }}">Delete</a>
+                        </td>
+                    </tr>
+            {% endfor %}
+                </table>
+            {% else %}
+                <p>No appointments found.</p>
+            {% endif %}
+        </main>
+
+        <footer style="margin-top: 20px;">
+            <p>&copy; 2025 SmartStuCardAppo. All Rights Reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
