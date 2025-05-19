@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Feedback</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* Root & base */
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Poppins', sans-serif;
+      color: #f0f0f5;
+      min-height: 100vh;
+      margin: 0;
+      padding: 40px 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      padding: 30px 40px;
+      max-width: 900px;
+      margin: auto;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    h2 {
+      font-weight: 600;
+      font-size: 2.4rem;
+      margin-bottom: 30px;
+      text-align: center;
+      letter-spacing: 1.1px;
+      text-shadow: 1px 1px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Table styling */
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 15px;
+      background: transparent;
+    }
+
+    thead th {
+      color: #d3d3f2;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      font-size: 0.95rem;
+      border-bottom: 2px solid rgba(255,255,255,0.3);
+      padding-bottom: 12px;
+      text-align: left;
+    }
+
+    tbody tr {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    tbody tr:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+    }
+
+    tbody tr td {
+      padding: 15px 20px;
+      vertical-align: middle;
+      color: #f0f0f5;
+      font-size: 1rem;
+      font-weight: 500;
+      border: none !important;
+    }
+
+    tbody tr td:first-child {
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #e0e0ff;
+    }
+
+    /* Delete button styling */
+    .btn-delete {
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 12px rgba(255, 75, 43, 0.6);
+      transition: background 0.3s ease, transform 0.2s ease;
+      user-select: none;
+    }
+
+    .btn-delete:hover {
+      background: linear-gradient(135deg, #ff4b2b, #ff416c);
+      transform: scale(1.1);
+      box-shadow: 0 6px 18px rgba(255, 75, 43, 0.8);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: 20px 10px;
+      }
+      .container {
+        padding: 20px;
+      }
+      thead th, tbody tr td {
+        font-size: 0.85rem;
+      }
+      h2 {
+        font-size: 1.8rem;
+      }
+      .btn-delete {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Student Feedback</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Student Number</th>
+          <th>Feedback</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for feedback in feedbacks %}
+        <tr>
+          <td>{{ feedback.StudentNumber }}</td>
+          <td>{{ feedback.feedback }}</td>
+          <td>{{ feedback.created_at }}</td>
+          <td>
+            <form method="POST" action="{{ url_for('feedbacks.delete_feedback', feedback_id=feedback.id) }}" onsubmit="return confirm('Are you sure?');">
+            <button type="submit" class="btn-delete">Delete</button>
+            </form>
+
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="4" style="text-align:center; color:#eee; font-style:italic;">No feedback available.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+    <div style="margin-bottom: 20px; text-align:center;">
+    <a href="{{ url_for('auth_routes.admin_home') }}" class="btn-print" style="text-decoration: none;">BACK</a>
+    <a href="{{ url_for('feedbacks.feedback_report') }}" class="btn-print" style="text-decoration: none;">View Report</a>
+    </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

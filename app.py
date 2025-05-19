@@ -8,7 +8,7 @@ def create_app():
     app.secret_key = secrets.token_hex(16)
     CORS(app)
 
-    from routes import auth_routes, student_routes, appointments, appointment_status , student_login , request_routes , notification
+    from routes import auth_routes, student_routes, appointments, appointment_status , student_login , request_routes , notification , feedback , suggestion
 
     app.register_blueprint(auth_routes.bp)
     app.register_blueprint(student_routes.students_bp)
@@ -17,5 +17,6 @@ def create_app():
     app.register_blueprint(student_login.bp)
     app.register_blueprint(request_routes.requests_bp)
     app.register_blueprint(notification.notifications_bp)
-
+    app.register_blueprint(feedback.feedback_bp)
+    app.register_blueprint(suggestion.suggestions_bp)
     return app

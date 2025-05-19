@@ -13,7 +13,7 @@ def main_home():
 def admin_login_page():
     return render_template("AdminLoginPage.html")
 
-@bp.route('/login', methods=['POST'])
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
     name = request.form.get('username')
     password = request.form.get('password')

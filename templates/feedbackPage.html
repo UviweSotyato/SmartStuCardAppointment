@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Add Feedback</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2em; max-width: 600px; margin: auto; }
+    h2 { text-align: center; }
+    form { display: flex; flex-direction: column; gap: 1em; }
+    label { font-weight: bold; }
+    input, textarea, select { padding: 0.5em; font-size: 1em; }
+    .heart-options {
+      display: flex;
+      gap: 1em;
+      align-items: center;
+    }
+    .heart-options label {
+      font-weight: normal;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+    button {
+      padding: 0.7em;
+      font-size: 1em;
+      background-color: #333;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Add Your Feedback</h2>
+
+  <form action="{{ url_for('feedbacks.add_feedback') }}" method="POST">
+    <label for="studentNumber">Student Number:</label>
+    <input type="text" id="studentNumber" name="studentNumber" required />
+
+    <label for="firstname">First Name:</label>
+    <input type="text" id="firstname" name="firstname" required />
+
+    <label for="lastname">Last Name:</label>
+    <input type="text" id="lastname" name="lastname" required />
+
+    <label for="feedback">Your Feedback:</label>
+    <textarea id="feedback" name="feedback" rows="4" required></textarea>
+
+    <label>How do you feel about the app?</label>
+    <div class="heart-options">
+      <label>
+        <input type="radio" name="emotion" value="heart" required />
+        ❤️
+      </label>
+      <label>
+        <input type="radio" name="emotion" value="broken_heart" />
+        💔
+      </label>
+    </div>
+
+    <label for="ratings">Rate the app (0 to 5 stars):</label>
+    <select id="ratings" name="ratings" required>
+      <option value="0">0 Stars</option>
+      <option value="1">1 Star</option>
+      <option value="2">2 Stars</option>
+      <option value="3">3 Stars</option>
+      <option value="4">4 Stars</option>
+      <option value="5">5 Stars</option>
+    </select>
+
+    <label for="faculty">Faculty:</label>
+    <input type="text" id="faculty" name="faculty" required />
+
+    <label for="course">Course:</label>
+    <input type="text" id="course" name="course" required />
+
+    <button type="submit">Submit Feedback</button>
+  </form>
+
+</body>
+</html>

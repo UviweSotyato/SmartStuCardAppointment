@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Extra Information Page</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<nav>
+  <div><strong><a href="{{ url_for('suggestions.view_suggestions') }}"> Extra Information</a></strong></div>
+  <div>
+    <a href="{{ url_for('auth_routes.main_home') }}">Home</a> <!-- ✅ Home link added -->
+    <a href="{{ url_for('suggestions.add_suggestion') }}">Suggestion</a>
+    <a href="{{ url_for('feedbacks.add_feedback') }}">Add Feedback</a>  <!-- New link -->
+    <a href="#about">About the App</a>
+    <a href="#feedback">Feedback</a>
+  </div>
+</nav>
+
+  <section id="about">
+    <h2>About the App</h2>
+    <p>This app is designed to collect user suggestions, provide contact information, and gather feedback to improve the system.</p>
+  </section>
+
+<section id="feedback">
+  <h2>Feedback</h2>
+  {% if feedbacks %}
+    <ul>
+    {% for f in feedbacks %}
+      <li><strong>{{ f.firstName }} {{ f.lastName }}</strong> - {{ f.feedback }}</li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <p>No feedbacks yet.</p>
+  {% endif %}
+</section>
+
+
+
+  <div class="suggestions">
+    <h3>User Suggestions</h3>
+    {% if suggestions %}
+      <ul>
+        {% for s in suggestions %}
+          <li><strong>Student {{ s.username }}:</strong> {{ s.suggestion }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No suggestions yet.</p>
+    {% endif %}
+  </div>
+
+  <footer>
+    <h4>Contacts</h4>
+    <p>Email: support@example.com | Phone: 123-456-7890</p>
+  </footer>
+
+</body>
+</html>

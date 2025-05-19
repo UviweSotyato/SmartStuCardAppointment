@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Suggestion Report</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary-color: #0b2240;
+      --primary-dark: #06172a;
+      --error-color: #d9534f;
+      --bg-color: #d3d3d3;
+      --white: #ffffff;
+      --text-color: #0b2240;
+      --accent-color: #b8860b;
+      --accent-dark: #7a5900;
+      --grey-dark: #4f4f4f;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      padding: 3rem 1rem;
+    }
+
+    .container {
+      max-width: 1000px;
+      background-color: var(--white);
+      padding: 2rem 3rem;
+      margin: auto;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(11, 34, 64, 0.15);
+      border: 2px solid var(--accent-color);
+    }
+
+    h2, h3 {
+      text-align: center;
+      color: var(--primary-color);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+    }
+
+    thead th {
+      background-color: var(--primary-color);
+      color: var(--white);
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      padding: 12px;
+    }
+
+    tbody td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      color: var(--grey-dark);
+    }
+
+    tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    .btn-bar {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .btn-bar button {
+      background-color: var(--accent-color);
+      color: var(--white);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      margin: 0 10px;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-bar button:hover {
+      background-color: var(--accent-dark);
+    }
+
+    @media print {
+      .btn-bar { display: none; }
+      body { background-color: #fff; color: #000; }
+      .container { box-shadow: none; border: none; }
+      table, h2, h3 { color: #000; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Suggestion Report</h2>
+
+    <div class="btn-bar">
+      <button onclick="window.history.back()">Back</button>
+      <button onclick="window.print()">Print Report</button>
+      <a href="{{ url_for('suggestions.view_sec_suggestions') }}">
+        <button>Back to Suggestions</button>
+      </a>
+    </div>
+
+    <h3>All Suggestions</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Student Number</th>
+          <th>Username</th>
+          <th>Faculty</th>
+          <th>Course</th>
+          <th>Suggestion</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in suggestions %}
+        <tr>
+          <td>{{ s.StudentNumber }}</td>
+          <td>{{ s.username }}</td>
+          <td>{{ s.faculty }}</td>
+          <td>{{ s.course if s.course else 'N/A' }}</td>
+          <td>{{ s.suggestion }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" style="text-align:center;">No suggestions available.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h3>Number of Students per Faculty</h3>
+    <table>
+      <thead>
+        <tr><th>Faculty</th><th>Number of Students</th></tr>
+      </thead>
+      <tbody>
+        {% for faculty, count in faculty_counts.items() %}
+        <tr>
+          <td>{{ faculty }}</td>
+          <td>{{ count }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="2" style="text-align:center;">No data available.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h3>Number of Students per Course</h3>
+    <table>
+      <thead>
+        <tr><th>Course</th><th>Number of Students</th></tr>
+      </thead>
+      <tbody>
+        {% for course, count in course_counts.items() %}
+        <tr>
+          <td>{{ course }}</td>
+          <td>{{ count }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="2" style="text-align:center;">No data available.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
