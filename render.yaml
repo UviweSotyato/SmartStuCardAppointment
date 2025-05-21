@@ -1,7 +1,6 @@
 services:
   - type: web
-    name: smartstucard
+    name: smart-student-appointment
     env: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "gunicorn main:app"
-    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn main:app  # <-- Replace 'main' with your actual filename (without .py)
