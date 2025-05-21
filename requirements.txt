@@ -1,6 +1,5 @@
 Flask
 flask-login
-
 gunicorn
 Jinja2
 Werkzeug
@@ -8,3 +7,4 @@ itsdangerous
 click
 python-dotenv
 flask-cors
+mysql-connector-python
