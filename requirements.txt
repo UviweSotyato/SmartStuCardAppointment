@@ -1,4 +1,6 @@
 Flask
+flask-login
+
 gunicorn
 Jinja2
 Werkzeug
