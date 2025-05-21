@@ -5,25 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Student Card Appointment System</title>
 
-  <!-- Local CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
-
-  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <style>
     #map {
       height: 400px;
       width: 100%;
       margin-top: 20px;
-      border-radius: 10px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
     }
   </style>
 </head>
 <body>
+
+  <!-- 🔷 Header -->
   <header>
     <h1>Student Card Appointment System</h1>
     <nav>
@@ -36,19 +36,22 @@
     </nav>
   </header>
 
+  <!-- 🔶 Main Content -->
   <main>
     <section>
       <h2>Welcome to the Student Card Appointment System</h2>
-      <p>Manage your student card appointments efficiently and hassle-free.</p>
+      <p style="text-align:center; font-size: 1.1rem;">
+        Manage your student card appointments efficiently and hassle-free.
+      </p>
     </section>
 
-    <!-- 🌍 TUT Campus Map Section -->
+    <!-- Leaflet Map -->
     <section aria-label="Map of TUT eMalahleni Campus">
-      <h3 style="text-align:center;">TUT eMalahleni Campus Location</h3>
+      <h3>TUT eMalahleni Campus Location</h3>
       <div id="map"></div>
     </section>
 
-    <!-- 🌸 Background Video -->
+    <!-- Background Video -->
     <section id="video-slideshow" aria-label="Video slideshow">
       <video autoplay muted loop playsinline>
         <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm" type="video/webm">
@@ -58,38 +61,45 @@
     </section>
   </main>
 
-<footer style="background-color:#f8f9fa; padding:20px; text-align:center;">
-  <p>&copy; 2025 Student Card Appointment System. All rights reserved.</p>
-  <div style="margin-top:10px;">
-    <a href="https://www.facebook.com/eza.mandlangisa/" target="_blank" style="margin: 0 10px; color:#3b5998;">
-      <i class="fab fa-facebook fa-2x"></i>
-    </a>
-    <a href="https://www.instagram.com/khululekanizenani/" target="_blank" style="margin: 0 10px; color:#e4405f;">
-      <i class="fab fa-instagram fa-2x"></i>
-    </a>
-    <a href="https://wa.me/27680939772" target="_blank" style="margin: 0 10px; color:#25D366;">
-      <i class="fab fa-whatsapp fa-2x"></i>
-    </a>
-  </div>
-</footer>
-
+  <!-- 🔻 Footer -->
+  <footer>
+    <p>&copy; 2025 Student Card Appointment System. All rights reserved.</p>
+    <div style="margin-top:10px;">
+      <a href="https://www.facebook.com/eza.mandlangisa/" target="_blank" style="margin: 0 10px; color:#3b5998;">
+        <i class="fab fa-facebook fa-2x"></i>
+      </a>
+      <a href="https://www.instagram.com/khululekanizenani/" target="_blank" style="margin: 0 10px; color:#e4405f;">
+        <i class="fab fa-instagram fa-2x"></i>
+      </a>
+      <a href="https://wa.me/27680939772" target="_blank" style="margin: 0 10px; color:#25D366;">
+        <i class="fab fa-whatsapp fa-2x"></i>
+      </a>
+    </div>
+  </footer>
 
   <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // Set up the map
-    var map = L.map('map').setView([-25.8739, 29.2110], 17);
+    const map = L.map('map').setView([-25.8739, 29.2110], 18); // TUT eMalahleni Campus
 
-    // Add OpenStreetMap tiles
+    // Use OpenStreetMap Tiles (free, no key needed)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Add a marker for TUT eMalahleni Campus
-    L.marker([-25.8739, 29.2110])
-      .addTo(map)
-      .bindPopup('<b>Tshwane University of Technology</b><br>eMalahleni Campus')
-      .openPopup();
+    // Add markers for buildings
+    const landmarks = [
+      { coords: [-25.8739, 29.2110], label: 'Main Entrance' },
+      { coords: [-25.8742, 29.2105], label: 'ICT Building' },
+      { coords: [-25.8735, 29.2120], label: 'Library' },
+      { coords: [-25.8728, 29.2115], label: 'Student Centre' },
+    ];
+
+    landmarks.forEach(place => {
+      L.marker(place.coords).addTo(map)
+        .bindPopup(`<b>${place.label}</b>`)
+        .openPopup();
+    });
   </script>
 </body>
 </html>

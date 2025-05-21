@@ -1,0 +1,7 @@
+Flask
+gunicorn
+Jinja2
+Werkzeug
+itsdangerous
+click
+python-dotenv

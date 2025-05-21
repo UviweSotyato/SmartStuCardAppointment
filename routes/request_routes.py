@@ -74,7 +74,7 @@ def submit_request():
                 connection.commit()
                 connection.close()
                 flash('Request submitted successfully!', 'success')
-                return redirect(url_for('requests.view_requests'))
+                return redirect(url_for('requests.view_sec_requests'))
             except Exception as e:
                 connection.rollback()
                 connection.close()
