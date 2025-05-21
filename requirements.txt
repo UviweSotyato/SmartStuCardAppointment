@@ -5,3 +5,4 @@ Werkzeug
 itsdangerous
 click
 python-dotenv
+flask-cors
