@@ -18,26 +18,44 @@ def view_status():
     else:
         return "Database connection failed"
 
-@status_bp.route('/edit/<status_id>', methods=['GET', 'POST'])
-def edit_status(status_id):
+@status_bp.route('/update_status/<int:status_id>', methods=['POST'])
+def update_status(status_id):
     if not session.get('logged_in'):
-        return redirect(url_for('login'))
+        return redirect(url_for('auth_routes.login'))
+
+    status_message = request.form.get('status_message')  # Only get what's in the form
+
     connection = db_config.get_db_connection()
     if connection:
-        cursor = connection.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM AppointmentStatus WHERE StatusID = %s", (status_id,))
-        status = cursor.fetchone()
-        if not status:
-            return "Status not found", 404
-
-        if request.method == 'POST':
-            new_status_name = request.form['new_status_name']
-            cursor.execute("UPDATE AppointmentStatus SET StatusName = %s WHERE StatusID = %s", (new_status_name, status_id))
-            connection.commit()
-            connection.close()
-            return redirect(url_for('status.view_status'))
-
+        cursor = connection.cursor()
+        cursor.execute(
+            "UPDATE appointmentstatus SET StatusMessage = %s WHERE StatusID = %s",
+            (status_message, status_id)
+        )
+        connection.commit()
+        cursor.close()
         connection.close()
-        return render_template('EditStatus.html', status=status)
+        return redirect(url_for('status.view_status'))
+    else:
+        return "Database connection failed", 500
+
+@status_bp.route('/update_status/<int:status_id>', methods=['POST'])
+def update_status_message(status_id):
+    if not session.get('logged_in'):
+        return redirect(url_for('auth_routes.login'))
+
+    status_message = request.form.get('status_message')
+    
+    connection = db_config.get_db_connection()
+    if connection:
+        cursor = connection.cursor()
+        cursor.execute(
+            "UPDATE appointmentstatus SET StatusMessage = %s WHERE StatusID = %s",
+            (status_message, status_id)
+        )
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return redirect(url_for('status.view_status'))
     else:
         return "Database connection failed", 500

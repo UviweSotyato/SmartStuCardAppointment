@@ -2,131 +2,146 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Report</title>
+    <title>Admin - View Requests</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
             padding: 20px;
         }
 
         h1 {
-            color: #4CAF50;
             text-align: center;
-            margin-bottom: 10px;
+            color: #111827;
         }
 
-        .report-header {
-            font-size: 1.2em;
+        .top-buttons {
+            text-align: center;
             margin-bottom: 20px;
-            background: #e8f5e9;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #c8e6c9;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+        }
+
+        .top-buttons a {
+            background-color: #10b981;
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+            font-size: 14px;
+            display: inline-block;
+        }
+
+        .top-buttons a:hover {
+            background-color: #059669;
+        }
+
+        .filter-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        select, button {
+            padding: 8px 12px;
+            margin: 0 5px;
+            font-size: 14px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-            background-color: white;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        table th {
-            background-color: #4CAF50;
-            color: white;
+        th, td {
             padding: 12px;
-            border: 1px solid #ddd;
-        }
-
-        table td {
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-
-        table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        /* Style the Print Button */
-        .no-print button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .no-print button:hover {
-            background-color: #388e3c;
-        }
-
-        .no-print {
             text-align: center;
-            margin-top: 30px;
+            border: 1px solid #e5e7eb;
         }
 
-        /* Hide the print button and adjust margins during printing */
-        @media print {
-            .no-print {
-                display: none;
-            }
-            body {
-                background: white;
-                padding: 0;
-            }
-            table {
-                page-break-inside: avoid;
-            }
+        th {
+            background-color: #1f2937;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        .action-form select {
+            padding: 5px;
+        }
+
+        .action-form button {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .action-form button:hover {
+            background-color: #2563eb;
         }
     </style>
 </head>
 <body>
+    <h1>Admin Request Management</h1>
 
-    <h1>Admin Report</h1>
-
-    <div class="report-header">
-        <p><strong>Number of Male Admins:</strong> {{ male_count }}</p>
-        <p><strong>Number of Female Admins:</strong> {{ female_count }}</p>
+    <div class="top-buttons">
+        <a href="{{ url_for('requests.request_stats') }}">📊 View Request Statistics</a>
     </div>
 
-    <h2>All Registered Admins</h2>
+    <div class="filter-container">
+        <form method="get" action="{{ url_for('requests.view_requests') }}">
+            <label for="status_filter">Filter by Status:</label>
+            <select name="status" id="status_filter" onchange="this.form.submit()">
+                <option value="">All</option>
+                <option value="Pending" {% if request.args.get('status') == 'Pending' %}selected{% endif %}>Pending</option>
+                <option value="Approved" {% if request.args.get('status') == 'Approved' %}selected{% endif %}>Approved</option>
+            </select>
+        </form>
+    </div>
+
     <table>
-        <tr>
-            <th>Admin ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Gender</th>
-        </tr>
-        {% for admin in admins %}
-        <tr>
-            <td>{{ admin.AdminID }}</td>
-            <td>{{ admin.Name }}</td>
-            <td>{{ admin.Surname }}</td>
-            <td>{{ admin.Email }}</td>
-            <td>{{ admin.Gender }}</td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>Request ID</th>
+                <th>Student Number</th>
+                <th>Appointment ID</th>
+                <th>Type</th>
+                <th>Message</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Update Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in requests %}
+            <tr>
+                <td>{{ request.RequestID }}</td>
+                <td>{{ request.StudentNumber }}</td>
+                <td>{{ request.Appointment_Id }}</td>
+                <td>{{ request.RequestType }}</td>
+                <td>{{ request.RequestMessage }}</td>
+                <td>{{ request.RequestDate }}</td>
+                <td>{{ request.RequestStatus }}</td>
+                <td>
+                    <form method="post" action="{{ url_for('requests.mark_done', request_id=request.RequestID) }}" class="action-form">
+                        <input type="hidden" name="request_id" value="{{ request.RequestID }}">
+                        <select name="new_status">
+                            <option value="Pending" {% if request.RequestStatus == 'Pending' %}selected{% endif %}>Pending</option>
+                            <option value="Approved" {% if request.RequestStatus == 'Approved' %}selected{% endif %}>Approved</option>
+                        </select>
+                        <button type="submit">Update</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
-
-    <!-- Print Button -->
-    <div class="no-print">
-        <button onclick="printReport()">Print Report</button>
-    </div>
-
-    <script>
-        function printReport() {
-            window.print();
-        }
-    </script>
-
+        <a href="{{ url_for('auth_routes.admin_home') }}" class="btn btn-secondary me-2">BACK</a>
 </body>
 </html>

@@ -29,20 +29,21 @@ def view_sec_suggestions():
     else:
         return "Database connection failed"
 
-@suggestions_bp.route('/delete_suggestion/<student_number>', methods=['POST'])
-def delete_suggestions(student_number):
+@suggestions_bp.route('/delete_suggestion/<int:suggestion_id>', methods=['POST'])
+def delete_suggestions(suggestion_id):
     try:
         connection = db_config.get_db_connection()
         if connection:
             cursor = connection.cursor()
-            cursor.execute("DELETE FROM Suggestions WHERE StudentNumber = %s", (student_number,))
+            cursor.execute("DELETE FROM Suggestions WHERE id = %s", (suggestion_id,))
             connection.commit()
             connection.close()
-            return redirect(url_for('suggestions.view_suggestions'))
+            return redirect(url_for('suggestions.view_sec_suggestions'))
         else:
             return jsonify({"error": "Database connection failed"}), 500
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
 
 @suggestions_bp.route('/add_suggestion', methods=['GET', 'POST'])
 def add_suggestion():

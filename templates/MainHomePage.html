@@ -4,7 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Student Card Appointment System</title>
+
+  <!-- Local CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='Styles.css') }}">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <style>
+    #map {
+      height: 400px;
+      width: 100%;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -25,6 +42,13 @@
       <p>Manage your student card appointments efficiently and hassle-free.</p>
     </section>
 
+    <!-- 🌍 TUT Campus Map Section -->
+    <section aria-label="Map of TUT eMalahleni Campus">
+      <h3 style="text-align:center;">TUT eMalahleni Campus Location</h3>
+      <div id="map"></div>
+    </section>
+
+    <!-- 🌸 Background Video -->
     <section id="video-slideshow" aria-label="Video slideshow">
       <video autoplay muted loop playsinline>
         <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm" type="video/webm">
@@ -34,8 +58,38 @@
     </section>
   </main>
 
-  <footer>
-    <p>&copy; 2025 Student Card Appointment System. All rights reserved.</p>
-  </footer>
+<footer style="background-color:#f8f9fa; padding:20px; text-align:center;">
+  <p>&copy; 2025 Student Card Appointment System. All rights reserved.</p>
+  <div style="margin-top:10px;">
+    <a href="https://www.facebook.com/eza.mandlangisa/" target="_blank" style="margin: 0 10px; color:#3b5998;">
+      <i class="fab fa-facebook fa-2x"></i>
+    </a>
+    <a href="https://www.instagram.com/khululekanizenani/" target="_blank" style="margin: 0 10px; color:#e4405f;">
+      <i class="fab fa-instagram fa-2x"></i>
+    </a>
+    <a href="https://wa.me/27680939772" target="_blank" style="margin: 0 10px; color:#25D366;">
+      <i class="fab fa-whatsapp fa-2x"></i>
+    </a>
+  </div>
+</footer>
+
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Set up the map
+    var map = L.map('map').setView([-25.8739, 29.2110], 17);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Add a marker for TUT eMalahleni Campus
+    L.marker([-25.8739, 29.2110])
+      .addTo(map)
+      .bindPopup('<b>Tshwane University of Technology</b><br>eMalahleni Campus')
+      .openPopup();
+  </script>
 </body>
 </html>

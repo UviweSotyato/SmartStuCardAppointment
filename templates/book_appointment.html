@@ -2,39 +2,144 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Book Appointment</title>
+  <title>Book Appointment | TUT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; }
-    header, footer { background-color: #0073e6; color: white; padding: 1em; text-align: center; }
-    .content { max-width: 600px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    a { color: #0073e6; text-decoration: none; }
-    button { background-color: #0073e6; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+    :root {
+      --primary-color: #0b2240;
+      --primary-dark: #06172a;
+      --accent-color: #b8860b;
+      --bg-color: #f4f4f4;
+      --white: #ffffff;
+      --error-color: #d9534f;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--primary-color);
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: var(--accent-color);
+      padding: 1.5em 2em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 3em auto;
+      background-color: var(--white);
+      padding: 2em;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2em;
+    }
+
+    input[type="text"] {
+      padding: 0.8em;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+
+    button {
+      padding: 0.8em;
+      background-color: var(--primary-color);
+      color: var(--white);
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 1em;
+      font-weight: bold;
+    }
+
+    .error {
+      color: var(--error-color);
+    }
+
+    footer {
+      background-color: var(--primary-dark);
+      color: var(--white);
+      text-align: center;
+      padding: 1em;
+      font-size: 0.9rem;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Book Appointment</h1>
+  <h1>Book Student Card Appointment</h1>
 </header>
 
-<div class="content">
-  <p>Welcome, {{ student.FirstName }} {{ student.LastName }} ({{ student.student_number }})</p>
-  <form method="POST" action="{{ url_for('submit_appointment', student_number=student.student_number) }}">
-    <label for="date">Select Date:</label><br>
-    <input type="date" id="date" name="date" required><br><br>
-
-    <label for="time">Select Time:</label><br>
-    <input type="time" id="time" name="time" required><br><br>
-
+<div class="container">
+  <h2>Enter Student Number</h2>
+  <form action="{{ url_for('appointments.add_appointment') }}" method="post" style="display:inline;">
+    <input type="hidden" name="student_number" value="{{ student.StudentNumber }}">
     <button type="submit">Book Appointment</button>
   </form>
-  <br>
-  <a href="{{ url_for('dashboard', student_number=student.student_number) }}">&#8592; Back to Dashboard</a>
+  <div class="message" id="responseMessage"></div>
 </div>
 
 <footer>
-  &copy; 2025 Student Card Appointment System
+  &copy; 2025 Tshwane University of Technology | support@tut.ac.za | +27 12 345 6789
 </footer>
+
+<script>
+  const form = document.getElementById('appointmentForm');
+  const message = document.getElementById('responseMessage');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const studentNumber = document.getElementById('student_number').value;
+
+    const response = await fetch('/add_appointment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: new URLSearchParams({ student_number: studentNumber })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      message.textContent = data.message;
+      message.classList.remove('error');
+    } else {
+      message.textContent = data.error || "Something went wrong.";
+      message.classList.add('error');
+    }
+  });
+</script>
 
 </body>
 </html>

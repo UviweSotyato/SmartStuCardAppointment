@@ -1,59 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Student Dashboard</title>
+  <title>Student Dashboard | Tshwane University of Technology</title>
   <style>
-    nav a, nav button {
-      background-color: #0073e6;
-      color: white;
-      padding: 12px 20px;
-      margin: 5px;
-      text-decoration: none;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s ease, transform 0.3s ease;
+    :root {
+      --primary-color: #0b2240;
+      --primary-dark: #06172a;
+      --accent-color: #b8860b;
+      --accent-dark: #7a5900;
+      --bg-color: #f4f4f4;
+      --white: #ffffff;
+      --grey-dark: #4f4f4f;
+      --error-color: #d9534f;
     }
 
-    nav a:hover, nav button:hover {
-      background-color: #005bb5;
-      transform: scale(1.05);
-    }
-
-    nav a:active, nav button:active {
-      background-color: #003f87;
-      transform: scale(1);
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--primary-color);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
     }
 
     header {
-      background-color: #0073e6;
-      color: white;
-      padding: 1em;
+      background-color: var(--primary-color);
+      color: var(--accent-color);
+      padding: 1.5em 2em;
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1em;
     }
 
     .profile-pic {
       border-radius: 50%;
-      width: 50px;
-      height: 50px;
+      width: 60px;
+      height: 60px;
       object-fit: cover;
-      cursor: pointer;
-      border: 2px solid white;
-      margin-right: 10px;
+      border: 2px solid var(--white);
+    }
+
+    nav {
+      background-color: var(--primary-color);
+      padding: 0.5em;
+      display: flex;
+      justify-content: center;
+      gap: 1em;
+    }
+
+    nav a,
+    nav button {
+      background-color: var(--primary-color);
+      color: var(--white);
+      padding: 0.6em 1.2em;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+
+    nav a:hover,
+    nav button:hover {
+      background-color: var(--primary-dark);
     }
 
     .container {
@@ -61,39 +85,31 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 2em;
     }
 
     .content {
-      text-align: center;
-      max-width: 800px;
+      background-color: var(--white);
+      padding: 2em;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 960px;
       width: 100%;
-      background: white;
-      padding: 20px;
+      text-align: center;
+    }
+
+    video {
+      width: 100%;
       border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    nav {
-      margin-bottom: 20px;
-    }
-
-    nav a, nav button {
-      background-color: #0073e6;
-      color: white;
-      padding: 10px 15px;
-      margin: 5px;
-      text-decoration: none;
-      border-radius: 5px;
-      border: none;
-      cursor: pointer;
+      margin-top: 1.5em;
     }
 
     footer {
-      background-color: #0073e6;
-      color: white;
+      background-color: var(--primary-dark);
+      color: var(--white);
       text-align: center;
-      padding: 1em;
+      padding: 1em 2em;
+      font-size: 0.9rem;
     }
 
     .modal {
@@ -105,137 +121,185 @@
       width: 100%;
       height: 100%;
       overflow: auto;
-      background-color: rgba(0,0,0,0.5);
+      background-color: rgba(0, 0, 0, 0.5);
     }
 
     .modal-content {
       background-color: white;
       margin: 5% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 400px;
+      padding: 0;
       border-radius: 10px;
+      width: 90%;
+      max-width: 550px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+      overflow: hidden;
     }
 
     .close {
-      color: #aaa;
       float: right;
       font-size: 24px;
       font-weight: bold;
+      color: #aaa;
       cursor: pointer;
-    }
-
-    video {
-      width: 100%;
-      border-radius: 8px;
+      margin: 10px;
     }
 
     .student-card {
-      border: 2px solid #0073e6;
-      border-radius: 10px;
-      padding: 15px;
-      text-align: center;
-      background-color: #f9f9f9;
+      width: 100%;
+      height: 250px;
+      display: flex;
+      background: #fff;
+      font-family: 'Segoe UI', sans-serif;
     }
 
-    .student-card img {
-      border-radius: 5px;
-      margin-bottom: 10px;
+    .card-inner {
+      display: flex;
+      width: 100%;
+      height: 100%;
     }
 
-    .badge {
+    .card-left {
+      background-color: var(--primary-color);
+      color: var(--white);
+      width: 40%;
+      padding: 20px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .university-logo {
       width: 60px;
-      height: auto;
       margin-bottom: 10px;
     }
 
-    .signature {
-      width: 100px;
-      height: auto;
-      margin-top: 10px;
+    .university-name {
+      font-size: 14px;
+      text-align: center;
     }
 
-    .card-title {
-      font-weight: bold;
-      margin-bottom: 5px;
+    .card-right {
+      width: 60%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
 
+    .student-photo {
+      width: 80px;
+      height: 100px;
+      object-fit: cover;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+
+    .student-info p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: var(--grey-dark);
+    }
+
+    #printCardBtn {
+      display: block;
+      margin: 15px auto;
+      background-color: var(--accent-color);
+      color: var(--white);
+      border: none;
+      padding: 0.6em 1.2em;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #printCardBtn:hover {
+      background-color: var(--accent-dark);
+    }
   </style>
 </head>
 <body>
 
-<header>
-  <img src="{{ student.PictureURL }}" alt="Profile Picture" class="profile-pic" id="profilePic">
-  <h1>Student Dashboard</h1>
-</header>
-
-<div class="container">
-  <div class="content">
-    <nav>
-      <a href="{{ url_for('appointments.add_appointment', student_number=student.StudentNumber) }}">Rebook Appointment</a>
-      <a href="{{ url_for('requests.view_requests') }}">View Requests</a>
-      <a href="{{ url_for('notifications.view_notifications') }}">View Notifications</a>      
-      <button id="viewCardBtn">View Student Card</button>
-    </nav>
-
-    <video controls>
-      <source src="your-video-file.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-
-  </div>
-</div>
-
-<footer>
-  <p>&copy; 2025 Student Card Appointment System | Contact: support@university.edu | Tel: +27 12 345 6789</p>
-</footer>
-
-<!-- Modal for student card preview -->
-<div id="cardModal" class="modal">
-  <div class="modal-content">
-    <span class="close" id="closeCardModal">&times;</span>
-    <div class="student-card" id="studentCardContent">
-      <img src="{{ url_for('static', filename='uploads/school-badge.png') }}" alt="School Badge" class="badge">
-      <div class="card-title">Tshwane University of Technology</div>
-      <img src="{{ student.PictureURL }}" alt="Student Picture" width="100">
-      <p><strong>Name:</strong> {{ student.FirstName }} {{ student.LastName }}</p>
-      <p><strong>Student Number:</strong> {{ student.StudentNumber }}</p>
-      <p><strong>Year:</strong> {{ current_year }}</p>
-      <img src="{{ student.SignatureURL }}" alt="Signature" class="signature">
+  <header>
+    <div class="header-left">
+      <img src="{{ url_for('static', filename='49de8c52-6683-45d7-9c40-ceb44852c1fd.jpeg') }}" alt="Profile Picture" class="profile-pic">
+      <h1>Student Dashboard</h1>
     </div>
-    <button id="printCardBtn">Print Card</button> <!-- 🖨️ Added Print Button -->
+  </header>
+
+  <nav>
+    <a href="{{ url_for('requests.view_sec_requests') }}">View Requests</a>
+    <a href="{{ url_for('notifications.view_notifications') }}">View Notifications</a>
+    <button id="viewCardBtn">View Student Card</button>
+  </nav>
+
+  <div class="container">
+    <div class="content">
+      <h2>Welcome, {{ student.FirstName }} {{ student.LastName }}</h2>
+      <video controls>
+        <source src="your-video-file.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
   </div>
-</div>
 
-<script>
-  const profilePic = document.getElementById('profilePic');
-  const viewCardBtn = document.getElementById('viewCardBtn');
-  const cardModal = document.getElementById('cardModal');
-  const closeCardModal = document.getElementById('closeCardModal');
-  const printCardBtn = document.getElementById('printCardBtn');
+  <footer>
+    <p>&copy; 2025 Tshwane University of Technology - Student Appointment System | support@tut.ac.za | +27 12 345 6789</p>
+  </footer>
 
-  viewCardBtn.onclick = () => cardModal.style.display = "block";
-  closeCardModal.onclick = () => cardModal.style.display = "none";
+  <!-- Student Card Modal -->
+  <div id="cardModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeCardModal">&times;</span>
+      <div class="student-card" id="studentCardContent">
+        <div class="card-inner">
+          <!-- Left branding column -->
+          <div class="card-left">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="University Logo" class="university-logo">
+            <h2 class="university-name">Tshwane University of Technology</h2>
+          </div>
 
-  window.onclick = (event) => {
-    if (event.target == cardModal) cardModal.style.display = "none";
-  };
+          <!-- Right content column -->
+          <div class="card-right">
+            <img src="{{ url_for('static', filename='49de8c52-6683-45d7-9c40-ceb44852c1fd.jpeg') }}" alt="Student Photo" class="student-photo">
+            <div class="student-info">
+              <p><strong>Name:</strong> {{ student.FirstName }} {{ student.LastName }}</p>
+              <p><strong>Student Number:</strong> {{ student.StudentNumber }}</p>
+              <p><strong>Year:</strong> {{ current_year }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button id="printCardBtn">Print Card</button>
+    </div>
+  </div>
+    <a href="{{ url_for('auth_routes.main_home') }}">&#8592; Back to Home </a>
+  <script>
+    const viewCardBtn = document.getElementById('viewCardBtn');
+    const cardModal = document.getElementById('cardModal');
+    const closeCardModal = document.getElementById('closeCardModal');
+    const printCardBtn = document.getElementById('printCardBtn');
 
-  printCardBtn.onclick = () => {
-    const cardContent = document.getElementById('studentCardContent').innerHTML;
-    const printWindow = window.open('', '', 'height=600,width=400');
-    printWindow.document.write('<html><head><title>Print Student Card</title>');
-    printWindow.document.write('<style>body{font-family:Arial,sans-serif;text-align:center;} .student-card img{border-radius:5px;margin-bottom:10px;} .badge{width:60px;height:auto;margin-bottom:10px;} .signature{width:100px;height:auto;margin-top:10px;} .card-title{font-weight:bold;margin-bottom:5px;}</style>');
-    printWindow.document.write('</head><body>');
-    printWindow.document.write('<div class="student-card">' + cardContent + '</div>');
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
-  };
+    viewCardBtn.onclick = () => cardModal.style.display = "block";
+    closeCardModal.onclick = () => cardModal.style.display = "none";
 
-</script>
+    window.onclick = (event) => {
+      if (event.target == cardModal) cardModal.style.display = "none";
+    };
+
+    printCardBtn.onclick = () => {
+      const content = document.getElementById('studentCardContent').innerHTML;
+      const printWindow = window.open('', '', 'height=600,width=400');
+      printWindow.document.write('<html><head><title>Print Student Card</title>');
+      printWindow.document.write('<style>body{font-family:Arial;text-align:center;} .student-card{display:flex;flex-direction:row;width:100%;height:250px;border:1px solid #000;} .card-left{width:40%;background:#0b2240;color:#fff;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;} .card-right{width:60%;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;} .student-photo{width:80px;height:100px;border:2px solid #ccc;border-radius:4px;margin-bottom:10px;} .student-info p{margin:5px 0;}</style>');
+      printWindow.document.write('</head><body><div class="student-card">' + content + '</div></body></html>');
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    };
+  </script>
 
 </body>
 </html>

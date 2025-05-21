@@ -9,20 +9,42 @@
 </head>
 <body>
 
-<nav>
-  <div><strong><a href="{{ url_for('suggestions.view_suggestions') }}"> Extra Information</a></strong></div>
-  <div>
-    <a href="{{ url_for('auth_routes.main_home') }}">Home</a> <!-- ✅ Home link added -->
-    <a href="{{ url_for('suggestions.add_suggestion') }}">Suggestion</a>
-    <a href="{{ url_for('feedbacks.add_feedback') }}">Add Feedback</a>  <!-- New link -->
-    <a href="#about">About the App</a>
-    <a href="#feedback">Feedback</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold text-warning" href="{{ url_for('suggestions.view_suggestions') }}">Extra Info</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('auth_routes.main_home') }}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('suggestions.add_suggestion') }}">Suggestion</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('feedbacks.add_feedback') }}">Add Feedback</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#about">About the App</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#feedback">Feedback</a>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>
 
+
   <section id="about">
     <h2>About the App</h2>
-    <p>This app is designed to collect user suggestions, provide contact information, and gather feedback to improve the system.</p>
+    <p>The Smart Student Card Appointment System is a user-friendly platform designed to streamline and simplify the process of booking student card collection appointments. It eliminates the need for long queues and confusion by allowing students to schedule their appointments in advance, ensuring better organization and efficient service. The system also allows students to submit feedback and suggestions to help improve campus services, making it a valuable communication tool between students and administrators.
+
+    This project was developed by a dedicated team of third-year Computer Science students Uviwe Sotyato , Nonjabulo Mtshali , Khululekani Zenani , Shrewdness Maluleke and Sinazo Zumana . Uviwe led the design of the system and coordinated team tasks. Sinazo handled research and contributed to the system’s design flow and documentation. Khululekani managed the documentation process and helped with project planning. Nonjabulo assisted with planning and provided key insights into user needs and Shrewdness was an overall helper in everything that was done . Together, the team worked with a shared goal: to solve a real student issue and contribute positively to campus operations.</p>
   </section>
 
 <section id="feedback">
@@ -55,7 +77,7 @@
 
   <footer>
     <h4>Contacts</h4>
-    <p>Email: support@example.com | Phone: 123-456-7890</p>
+    <p>Email: support@smartholdings.com | Phone: +27 83 286 5984</p>
   </footer>
 
 </body>

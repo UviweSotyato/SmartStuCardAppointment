@@ -112,13 +112,14 @@
       {% for item in [
         ('Students', 'View and manage student records.', 'students.view_students'),
         ('Appointments', 'Manage student card collection appointments.', 'appointments.view_appointments'),
-        ('Appointment Status', 'Check the latest appointment statuses.', 'status.view_status'),
-        ('Generate Report', 'Print student collection statistics.', 'students.generate_report'),
+        ('Appointment Status', 'Check the latest appointment statuses.', 'status.view_status'),  
         ('Generate Admin Report', 'Print admin report with gender statistics.', 'students.generate_admin_report'),
-        ('Print Requests', 'Print all data from the request table.', 'requests.print_requests'),
+        ('View Requests', 'View all submitted requests', 'requests.view_requests'),
         ('Suggestions', 'View suggestions made by students.', 'suggestions.view_sec_suggestions'),
-        ('Feedbacks', 'View feedbacks made by students.', 'feedbacks.view_sec_feedbacks')
+        ('Feedbacks', 'View feedbacks made by students.', 'feedbacks.view_sec_feedbacks'),
+        ('Students Report ', 'View and manage student records.', 'students.generate_student_report'),
       ] %}
+
       <div class="col-md-6 col-lg-4">
         <div class="card h-100 text-center p-3">
           <div class="card-body">

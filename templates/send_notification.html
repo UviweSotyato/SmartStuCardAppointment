@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Send Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], textarea, button {
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        a {
+            text-align: center;
+            display: block;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Send Notification</h1>
+        </header>
+        <main>
+            <form action="{{ url_for('notifications.send_notification') }}" method="POST">
+                <label for="student_number">Student Number:</label>
+                <input type="text" name="student_number" id="student_number" maxlength="9" required>
+
+                <label for="message">Message:</label>
+                <textarea name="message" id="message" rows="4" required></textarea>
+
+                <button type="submit">Send Notification</button>
+            </form>
+            <a href="{{ url_for('auth_routes.admin_home') }}">Back to Dashboard</a>
+        </main>
+        <footer>
+            <p>&copy; 2025 SmartStuCardAppo. All Rights Reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

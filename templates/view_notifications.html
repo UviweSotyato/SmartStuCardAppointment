@@ -1,59 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>View Notifications</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>View Notifications | Tshwane University of Technology</title>
   <style>
-    body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; }
-    header, footer { background-color: #0073e6; color: white; padding: 1em; text-align: center; }
-    .content { max-width: 700px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .notification { border-bottom: 1px solid #ddd; padding: 10px 0; }
-    .notification:last-child { border-bottom: none; }
-    a, button { color: white; text-decoration: none; background-color: #0073e6; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; margin: 5px 0; display: inline-block; }
-    button.delete-btn { background-color: #e60000; }
-    form.inline { display: inline; }
-    input[type="date"] { padding: 7px; border-radius: 5px; border: 1px solid #ccc; }
-    .actions { margin-top: 20px; }
+    :root {
+      --primary-color: #0b2240;
+      --primary-dark: #06172a;
+      --accent-color: #b8860b;
+      --accent-dark: #7a5900;
+      --bg-color: #f4f4f4;
+      --white: #ffffff;
+      --grey-dark: #4f4f4f;
+      --error-color: #d9534f;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--primary-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: var(--accent-color);
+      padding: 1.5em 2em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+    }
+
+    .profile-pic {
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border: 2px solid var(--white);
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2em;
+    }
+
+    .content {
+      background-color: var(--white);
+      padding: 2em;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+    }
+
+    h2 {
+      margin-bottom: 1em;
+      text-align: center;
+    }
+
+    .notification {
+      border-bottom: 1px solid #ddd;
+      padding: 1em 0;
+    }
+
+    .notification:last-child {
+      border-bottom: none;
+    }
+
+    .actions {
+      margin-top: 2em;
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+      align-items: center;
+    }
+
+    input[type="date"] {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button, a.button-link {
+      background-color: var(--primary-color);
+      color: var(--white);
+      padding: 0.6em 1.2em;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover, a.button-link:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .delete-btn {
+      background-color: var(--error-color);
+    }
+
+    footer {
+      background-color: var(--primary-dark);
+      color: var(--white);
+      text-align: center;
+      padding: 1em 2em;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>View Notifications</h1>
+  <div class="header-left">
+    <img src="{{ url_for('static', filename='49de8c52-6683-45d7-9c40-ceb44852c1fd.jpeg') }}" alt="Profile Picture" class="profile-pic">
+    <h1>Notifications Center</h1>
+  </div>
 </header>
 
-<div class="content">
-  <p>Notifications for {{ student.FirstName }}:</p>
+<div class="container">
+  <div class="content">
+    <h2>Notifications for {{ student.FirstName }}</h2>
 
-  {% if notifications %}
-    {% for note in notifications %}
-      <div class="notification">
-        <strong>{{ note.Title }}</strong><br>
-        <small>{{ note.NotificationDate }}</small><br>
-        <p>{{ note.Message }}</p>
-      </div>
-    {% endfor %}
-  {% else %}
-    <p>No notifications available.</p>
-  {% endif %}
+    {% if notifications %}
+      {% for note in notifications %}
+        <div class="notification">
+          <strong>{{ note.Title }}</strong><br>
+          <small>{{ note.NotificationDate }}</small>
+          <p>{{ note.Message }}</p>
 
-  <div class="actions">
-    <!-- Filter by date -->
-    <form class="inline" action="{{ url_for('notifications.filter_notifications_by_date') }}" method="get">
-      <input type="date" name="date" required>
-      <button type="submit">Filter by Date</button>
-    </form>
+          {% if note.StatusMessage %}
+            <p><strong>Status:</strong> {{ note.StatusMessage }}</p>
+          {% endif %}
 
-    <!-- Delete all -->
-    <button type="button" class="delete-btn" onclick="confirmDelete()">Delete All Notifications</button>
+          {% if note.CollectionDate and note.CollectionTime %}
+            <p><strong>Collection:</strong> {{ note.CollectionDate }} at {{ note.CollectionTime }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No notifications available.</p>
+    {% endif %}
 
-    <br><br>
-    <a href="{{ url_for('student_login.student_dashboard', student_number=student.student_number) }}">Back to Dashboard</a>
+    <div class="actions">
+      <form class="inline" action="{{ url_for('notifications.filter_notifications_by_date') }}" method="get">
+        <input type="date" name="date" required>
+        <button type="submit">Filter by Date</button>
+      </form>
+
+      <button type="button" class="delete-btn" onclick="confirmDelete()">Delete All Notifications</button>
+
+      <a class="button-link" href="{{ url_for('student_login.student_dashboard', student_number=student.StudentNumber) }}">Back to Dashboard</a>
+    </div>
   </div>
 </div>
 
 <footer>
-  &copy; 2025 Student Card Appointment System
+  &copy; 2025 Tshwane University of Technology - Student Appointment System
 </footer>
 
 <script>
@@ -61,7 +185,7 @@
     if (confirm('Are you sure you want to delete all notifications?')) {
       fetch('{{ url_for("notifications.delete_all_notifications") }}', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'}
+        headers: { 'Content-Type': 'application/json' }
       })
       .then(response => {
         if (response.ok) {

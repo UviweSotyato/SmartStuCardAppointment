@@ -21,23 +21,27 @@
 </header>
 
 <div class="content">
-  <form action="{{ url_for('requests.submit_request') }}" method="POST">
+<form method="POST" action="{{ url_for('requests.submit_request') }}">
     <input type="hidden" name="student_number" value="{{ session['student_number'] }}">
 
-    <label for="request_type">Select Request Type</label>
-    <select name="request_type" id="request_type" required onchange="toggleDateField()">
-      <option value="">-- Choose Request Type --</option>
-      <option value="cancel">Application Cancellation</option>
-      <option value="change_date">Application Date Change</option>
+    <label for="appointment_id">Appointment ID (if applicable):</label>
+    <input type="number" name="appointment_id" placeholder="Optional">
+
+    <label for="request_type">Request Type:</label>
+    <select name="request_type" id="request_type" required>
+        <option value="cancel">Cancel Appointment</option>
+        <option value="change_date">Change Date</option>
     </select>
 
-    <div id="dateField" style="display:none;">
-      <label for="new_date">Select New Date (only for Date Change)</label>
-      <input type="date" name="new_date" id="new_date">
-    </div>
+<input type="number" name="appointment_id" id="appointment_id" placeholder="Optional">
+
+
+    <label for="request_message">Message:</label>
+    <textarea name="request_message" rows="3" placeholder="Your message here..."></textarea>
 
     <button type="submit">Submit Request</button>
-  </form>
+</form>
+
 
   <a class="back-link" href="{{ url_for('requests.view_requests') }}">&#8592; Back to View Requests</a>
 </div>

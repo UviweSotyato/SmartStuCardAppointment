@@ -3,6 +3,28 @@ from db_config import get_db_connection
 
 bp = Blueprint('student_login', __name__)  # Unique name
 
+
+from flask_login import login_user, logout_user, current_user, login_required, LoginManager, UserMixin
+from app import login_manager
+import db_config
+
+class User(UserMixin):
+    def __init__(self, id, student_number):
+        self.id = id
+        self.StudentNumber = student_number
+
+@login_manager.user_loader
+def load_user(user_id):
+    connection = db_config.get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM Students WHERE id = %s", (user_id,))
+    user_data = cursor.fetchone()
+    connection.close()
+    if user_data:
+        return User(user_data['id'], user_data['StudentNumber'])
+    return None
+
+
 # Route for the main page or homepage
 @bp.route('/')
 def main_home():

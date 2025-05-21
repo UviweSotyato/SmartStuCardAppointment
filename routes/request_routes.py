@@ -7,28 +7,38 @@ import pandas as pd
 
 requests_bp = Blueprint('requests', __name__, url_prefix='/requests')
 
-@requests_bp.route('/')
-def view_requests():
+# For student or secretary viewing requests
+@requests_bp.route('/student')
+def view_sec_requests():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
-
-    student_number = session.get('student_number')  # get from session
 
     connection = db_config.get_db_connection()
     if connection:
         cursor = connection.cursor(dictionary=True)
 
-        # Fetch all requests
-        cursor.execute("SELECT * FROM requesttable WHERE StudentNumber = %s", (student_number,))
+        cursor.execute("SELECT * FROM requesttable")
         all_requests = cursor.fetchall()
 
-        # Optional: fetch student details if needed (example query)
-        cursor.execute("SELECT * FROM Students WHERE StudentNumber = %s", (student_number,))
-        student = cursor.fetchone()
+        connection.close()
+        return render_template('view_requests.html', requests=all_requests)
+    else:
+        return "Database connection failed"
+
+@requests_bp.route('/')
+def view_requests():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    connection = db_config.get_db_connection()
+    if connection:
+        cursor = connection.cursor(dictionary=True)
+
+        cursor.execute("SELECT * FROM requesttable")
+        all_requests = cursor.fetchall()
 
         connection.close()
-
-        return render_template('View_requests.html', requests=all_requests, student=student)
+        return render_template('AdminReportPage.html', requests=all_requests)
     else:
         return "Database connection failed"
 
@@ -39,19 +49,32 @@ def submit_request():
 
     if request.method == 'POST':
         student_number = request.form['student_number']
-        request_type = request.form['request_type']  # "cancel" or "change_date"
-        new_date = request.form.get('new_date')  # Only required if request_type is change_date
+        request_type = request.form['request_type']
+        request_message = request.form.get('request_message', 'No message').strip()
+        appointment_id_raw = request.form.get('appointment_id', '').strip()
+
+        appointment_id = int(appointment_id_raw) if appointment_id_raw else None
 
         connection = db_config.get_db_connection()
         if connection:
             cursor = connection.cursor()
-            sql = "INSERT INTO requesttable  (StudentNumber, RequestType, NewDate) VALUES (%s, %s, %s)"
+            sql = """
+                INSERT INTO requesttable 
+                (StudentNumber, Appointment_Id, RequestType, RequestMessage, RequestStatus)
+                VALUES (%s, %s, %s, %s, %s)
+            """
             try:
-                cursor.execute(sql, (student_number, request_type, new_date))
+                cursor.execute(sql, (
+                    student_number,
+                    appointment_id,
+                    request_type,
+                    request_message,
+                    "Pending"
+                ))
                 connection.commit()
                 connection.close()
                 flash('Request submitted successfully!', 'success')
-                return redirect(url_for('requests.submit_request'))
+                return redirect(url_for('requests.view_requests'))
             except Exception as e:
                 connection.rollback()
                 connection.close()
@@ -72,7 +95,7 @@ def delete_all_requests():
         connection = db_config.get_db_connection()
         if connection:
             cursor = connection.cursor()
-            cursor.execute("DELETE FROM requesttable  WHERE StudentNumber = %s", (session['student_number'],))
+            cursor.execute("DELETE FROM requesttable WHERE StudentNumber = %s", (session['student_number'],))
             connection.commit()
             connection.close()
             return jsonify({"message": "All requests deleted successfully"}), 200
@@ -80,7 +103,7 @@ def delete_all_requests():
             return jsonify({"error": "Database connection failed"}), 500
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
+    
 @requests_bp.route('/print_requests')
 def print_requests():
     if not session.get('logged_in'):
@@ -90,18 +113,15 @@ def print_requests():
         connection = db_config.get_db_connection()
         if connection:
             cursor = connection.cursor(dictionary=True)
-            cursor.execute("SELECT * FROM requesttable")  # Fetch all requests from the requesttable
+            cursor.execute("SELECT * FROM requesttable")
             all_requests = cursor.fetchall()
             connection.close()
 
-            # Check if there are any records
+            
             if not all_requests:
                 return "No requests found", 404
 
-            # Prepare the table headers
-            headers = ["RequestID", "StudentNumber", "Appointment_Id", "RequestType", "RequestMessage", "RequestDate", "RequestStatus"]
-
-            # Prepare the report content in a similar format as the second code
+            # Prepare headers and table rows
             report_lines = ["+----------------+-------------+------+-----+-------------------+-------------------+"]
             report_lines.append("| Field          | Type        | Null | Key | Default           | Extra             |")
             report_lines.append("+----------------+-------------+------+-----+-------------------+-------------------+")
@@ -118,10 +138,10 @@ def print_requests():
                 report_lines.append("| {:<14} | {:<12} | {:<4} | {:<3} | {:<17} | {:<17} |".format(*row_data))
             report_lines.append("+----------------+-------------+------+-----+-------------------+-------------------+")
 
-            # Convert the list of lines to a single string
+            
             report_content = "\n".join(report_lines)
 
-            # Render the report in an HTML page
+            
             return render_template('AdminReportPage.html', report_content=report_content)
 
         else:
@@ -130,3 +150,71 @@ def print_requests():
     except Exception as e:
         flash(f"An error occurred: {str(e)}", 'error')
         return redirect(url_for('AdminReportPage.html'))
+    
+@requests_bp.route('/mark_done/<int:request_id>', methods=['POST'])
+def mark_done(request_id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    new_status = request.form.get('new_status')
+
+    try:
+        connection = db_config.get_db_connection()
+        if connection:
+            cursor = connection.cursor()
+            cursor.execute(
+                "UPDATE requesttable SET RequestStatus = %s WHERE RequestID = %s",
+                (new_status, request_id)
+            )
+            connection.commit()
+            connection.close()
+            flash("Status updated successfully!", "success")
+        else:
+            flash("Database connection failed!", "error")
+    except Exception as e:
+        flash(f"Error updating status: {str(e)}", "error")
+
+    return redirect(url_for('requests.view_requests'))
+
+@requests_bp.route('/stats')
+def request_stats():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+    try:
+        connection = db_config.get_db_connection()
+        if connection:
+            cursor = connection.cursor(dictionary=True)
+
+            # Total number of requests
+            cursor.execute("SELECT COUNT(*) AS total_requests FROM requesttable")
+            total_requests = cursor.fetchone()['total_requests']
+
+            # Number of each request type
+            cursor.execute("""
+                SELECT RequestType, COUNT(*) AS count 
+                FROM requesttable 
+                GROUP BY RequestType
+            """)
+            request_type_counts = cursor.fetchall()
+
+            # Number of each request status
+            cursor.execute("""
+                SELECT RequestStatus, COUNT(*) AS count 
+                FROM requesttable 
+                GROUP BY RequestStatus
+            """)
+            status_counts = cursor.fetchall()
+
+            connection.close()
+
+            return render_template(
+                'RequestStatsPage.html',
+                total_requests=total_requests,
+                request_type_counts=request_type_counts,
+                status_counts=status_counts
+            )
+        else:
+            return "Database connection failed", 500
+    except Exception as e:
+        return f"An error occurred: {str(e)}", 500

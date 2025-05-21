@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Request Statistics Report</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Custom Styling -->
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding: 40px;
+    }
+    .report-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .report-title {
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+    .summary-label {
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+    .btn-print {
+      margin-top: 20px;
+    }
+    @media print {
+      .btn-print, .btn-back {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container report-container">
+    <h2 class="text-center report-title">📑 Student Request Summary Report</h2>
+
+    <p class="summary-label">Total Requests Made: <strong>{{ total_requests }}</strong></p>
+
+    <div class="mb-4">
+      <h5 class="summary-label">Number of Requests by Type:</h5>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead class="table-dark">
+            <tr>
+              <th>Request Type</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in request_type_counts %}
+              <tr>
+                <td>{{ row.RequestType }}</td>
+                <td>{{ row.count }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <h5 class="summary-label">Number of Requests by Status:</h5>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead class="table-dark">
+            <tr>
+              <th>Request Status</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in status_counts %}
+              <tr>
+                <td>{{ row.RequestStatus }}</td>
+                <td>{{ row.count }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <button class="btn btn-primary btn-print" onclick="window.print()">🖨️ Print Report</button>
+      <a href="{{ url_for('auth_routes.admin_home') }}" class="btn btn-secondary btn-back">← Back to Admin Home</a>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
